@@ -195,7 +195,7 @@ box.innerHTML=l.length?l.map(function(r){var st="★".repeat(r.stars)+"☆".repe
 var img=(r.img&&r.img.indexOf("/_blob/")===0)?'<img src="'+r.img+'" alt="รูปประกอบรีวิว" loading="lazy" style="max-width:100%;border-radius:8px;margin:6px 0">':'';
 var ad=ADMIN?'<div style="margin-top:8px"><input data-rep="'+esc(r.id)+'" value="'+esc(r.reply||"")+'" placeholder="คำตอบจากร้าน" aria-label="คำตอบจากร้าน" style="margin-bottom:6px"><button class="btn" type="button" data-save="'+esc(r.id)+'">บันทึกคำตอบ</button> <button class="btn" type="button" data-del="'+esc(r.id)+'">ลบ</button></div>':'';
 return '<div class="shop" style="display:block"><b>'+esc(r.shop)+'</b>'+(r.demo?' <small>(ตัวอย่าง)</small>':'')+'<div aria-label="'+r.stars+' จาก 5 ดาว">'+st+'</div><p style="margin:4px 0">'+esc(r.text)+'</p>'+img+(r.reply?'<small><b>ร้านตอบกลับ:</b> '+esc(r.reply)+'</small>':'')+ad+'</div>';}).join(""):"ยังไม่มีรีวิว เป็นคนแรกที่รีวิวได้เลย";}
-document.getElementById("rvsend").href="https://line.me/R/oaMessage/"+LINE_ID+"/+encodeURIComponent("รีวิวร้าน: \nคะแนน (1-5): \nข้อความ: ");
+document.getElementById("rvsend").href="https://line.me/R/oaMessage/"+LINE_ID+"/"+encodeURIComponent("รีวิวร้าน: \nคะแนน (1-5): \nข้อความ: ");
 document.getElementById("rv").addEventListener("input",drawReviews);drawReviews();
 async function saveReviews(msg){
 var art=(typeof claude!=="undefined")?await claude.use("artifact"):null;
