@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MU AROUND @ SARAYA</title>
+<style>
+:root{--blue:#003580;--yellow:#ffdf5d;--brown:#3a1a00;--cream:#fbe8cf;--bg:#fffaf0;--ink:#2a1500;--card:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1b33;--ink:#fbe8cf;--card:#16294d;color-scheme:dark}}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Prompt","Noto Sans Thai",system-ui,sans-serif;line-height:1.6}
+section{padding:32px 20px;max-width:560px;margin:0 auto}
+.blue{background:var(--blue);color:var(--cream)}.yellow{background:var(--yellow);color:var(--brown)}
+.blue,.yellow{max-width:none}.blue>div,.yellow>div{max-width:520px;margin:0 auto}
+h1,h2{margin:0 0 4px;line-height:1.2;font-weight:800}
+h1{font-size:2rem}h2{font-size:1.6rem}
+p.sub{margin:0 0 16px;opacity:.85}
+input,select,textarea{width:100%;padding:12px 14px;font:inherit;border-radius:10px;border:2px solid currentColor;background:#fff;color:#2a1500;margin-bottom:12px}
+.btn{display:inline-block;padding:12px 18px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid currentColor;color:inherit;background:transparent;font:inherit;font-weight:700;cursor:pointer}
+.btn.solid{background:var(--yellow);color:var(--brown);border-color:var(--yellow)}
+.yellow .btn.solid{background:var(--brown);color:var(--yellow);border-color:var(--brown)}
+.shop{background:var(--card);color:var(--ink);border-radius:12px;padding:12px 14px;margin:0 0 10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.shop b{display:block}.shop small{opacity:.7}
+.shop a{white-space:nowrap;font-weight:700;color:var(--blue);text-decoration:none}
+@media (prefers-color-scheme:dark){.shop a{color:var(--yellow)}}
+.hero{padding-top:40px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.steps{padding-left:20px;margin:0 0 16px}
+:focus-visible{outline:3px solid #ff7a00;outline-offset:2px}
+</style>
+</head>
+<body>
+
+<section class="blue hero"><div>
+<h1>MU AROUND @ SARAYA</h1>
+<p class="sub">ค้นหาร้าน ดูร้านใกล้ตัว สะสมแต้ม และรีวิวได้ในที่เดียว</p>
+<nav>
+<a class="btn solid" href="#search">ค้นหา</a><a class="btn" href="#near-me">ร้านใกล้ฉัน</a><a class="btn" href="#recommend">ร้านเด็ด</a>
+<a class="btn" href="#reward">สะสมแต้ม</a><a class="btn" href="#contact">ติดต่อ</a><a class="btn" href="#review">รีวิว</a>
+</nav></div></section>
+
+<section class="blue" id="search"><div>
+<h2>ค้นหา</h2>
+<p class="sub">ต้องการอะไร พิมพ์ชื่อสินค้า เมนู หรือบริการ แล้วเราจะแนะนำร้านที่มีให้</p>
+<input id="q" type="search" placeholder="เช่น ส้มตำ หม่าล่า ทำเล็บ ถ่ายเอกสาร" aria-label="พิมพ์สิ่งที่ต้องการหา">
+<div id="chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px"></div>
+<div id="results"></div>
+</div></section>
+
+<section class="yellow" id="near-me"><div>
+<h2>ร้านใกล้ฉัน</h2>
+<p class="sub">กดปุ่มเพื่อระบุตำแหน่งของคุณ แล้วเราจะเรียงร้านจากใกล้ไปไกล</p>
+<button class="btn solid" id="loc" type="button">ใช้ตำแหน่งของฉัน</button>
+<p class="sub" style="margin-top:14px">หรือเลือกทำเลที่คุณอยู่</p>
+<div id="zonechips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+<p id="locmsg" class="sub" style="margin-top:12px" aria-live="polite"></p>
+<div id="nearlist"></div>
+<p class="sub" style="margin-top:18px">หรือดูร้านรอบตัวบนแผนที่</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<a class="btn solid" href="https://www.google.com/maps/search/ร้านอาหาร">ร้านอาหาร</a>
+<a class="btn solid" href="https://www.google.com/maps/search/ร้านทำเล็บ">ร้านทำเล็บ</a>
+<a class="btn solid" href="https://www.google.com/maps/search/ร้านทำผม">ร้านทำผม</a>
+<a class="btn solid" href="https://www.google.com/maps/search/ร้านถ่ายเอกสาร">ร้านถ่ายเอกสาร</a>
+<a class="btn solid" href="https://www.google.com/maps/search/ร้านติดฟิล์มโทรศัพท์">ร้านติดฟิล์มโทรศัพท์</a>
+</div>
+</div></section>
+
+<section class="blue" id="recommend"><div>
+<h2>ร้านเด็ด</h2>
+<p class="sub">ร้านที่ทีมงานแนะนำ</p>
+<div id="picks"></div>
+</div></section>
+
+<section class="yellow" id="reward"><div>
+<h2>สะสมแต้ม</h2>
+<p class="sub">ใช้การ์ดสะสมแต้มในไลน์ ไม่ต้องโหลดแอปเพิ่ม</p>
+<ol class="steps">
+<li>กดรับการ์ดสะสมแต้มในแชทไลน์</li>
+<li>แสดงการ์ดให้ร้านสแกนทุกครั้งที่ซื้อ</li>
+<li>ครบตามเงื่อนไข แลกของรางวัลได้ที่ร้าน</li>
+</ol>
+<a class="btn solid" href="https://line.me/R/oaMessage/@077rywcj/?text=สะสมแต้ม">ขอรับการ์ดสะสมแต้ม</a>
+</div></section>
+
+<section class="blue" id="contact"><div>
+<h2>ติดต่อ</h2>
+<p class="sub">ทักแชทไลน์หรือส่งอีเมลหาทีมงานได้เลย</p>
+<a class="btn solid" href="https://line.me/R/ti/p/@077rywcj">แชทไลน์</a>
+<p class="sub" style="margin-top:14px">อีเมล <a href="mailto:mugec05.257@gmail.com" style="color:inherit">mugec05.257@gmail.com</a></p>
+</div></section>
+
+<section class="yellow" id="review"><div>
+<h2>รีวิว</h2>
+<p class="sub">ดูรีวิวจากลูกค้า และเขียนรีวิวของคุณได้ทางแชทไลน์</p>
+<a class="btn solid" id="rvsend" href="#review">เขียนรีวิวทางไลน์</a>
+<p class="sub" style="margin-top:10px">ส่งชื่อร้าน คะแนน ข้อความ และแนบรูปในแชทได้ ทีมงานจะนำรีวิวขึ้นที่หน้านี้</p>
+<input id="rv" type="search" placeholder="ค้นหารีวิวตามชื่อร้าน" aria-label="ค้นหารีวิวตามชื่อร้าน" style="margin-top:6px">
+<div id="rvlist" style="max-height:420px;overflow-y:auto"></div>
+<div id="adminbox" hidden style="margin-top:16px;padding:14px;border:2px dashed currentColor;border-radius:12px">
+<b>โหมดแอดมิน (เห็นเฉพาะคุณ)</b>
+<p class="sub" style="margin:4px 0 10px">เพิ่มรีวิว ตอบกลับในนามร้าน หรือลบรีวิวได้ที่นี่ กดบันทึกแล้วหน้าเพจจะโหลดใหม่</p>
+<select id="ashop" aria-label="เลือกร้าน"></select>
+<select id="astars" aria-label="คะแนน"><option value="5">5 ดาว</option><option value="4">4 ดาว</option><option value="3">3 ดาว</option><option value="2">2 ดาว</option><option value="1">1 ดาว</option></select>
+<textarea id="atext" rows="3" placeholder="ข้อความรีวิว" aria-label="ข้อความรีวิว"></textarea>
+<input id="afile" type="file" accept="image/*" aria-label="แนบรูป">
+<button class="btn solid" id="aadd" type="button">เพิ่มรีวิว</button>
+<p id="amsg" class="sub" style="margin:8px 0 0" aria-live="polite"></p>
+</div>
+<script type="application/json" id="rvdata">[{"id": "demo1", "shop": "เต่งอาหารตามสั่ง", "stars": 5, "text": "กะเพราหอม รสจัดจ้าน ให้เยอะ ราคาไม่แพง", "img": "", "reply": "ขอบคุณที่มาอุดหนุนนะคะ", "demo": 1}]</script>
+</div></section>
+
+<script>
+// แก้รายชื่อร้านตรงนี้ได้เลย
+// t = ประเภทร้าน, a = ทำเลที่ตั้ง, m = สินค้า/บริการที่ใช้ค้นหา, pick:1 = แสดงใน "ร้านเด็ด"
+var SHOPS=[
+{"n": "เต่งอาหารตามสั่ง", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 4", "pick": 1, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "ณ ชล ข้าวราดแกง", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 4", "pick": 1, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "ร้านป๋าสุ อาหารตามสั่ง", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 4", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "กล่องกับข้าว", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 4", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "สามเหรียญ", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 4", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "เช้าจานเย็นชาม", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 6", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "ครัวสบาย", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ซอยตั้งสิน ตรงข้ามไชน่าทาวน์ท้ายซอย", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "ร้านสลัด", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ใต้หอบัณฑิต", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "ร้านข้าวไข่ข้น", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "ประตู 4", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "นัยบ้าน", "t": "อาหารตามสั่ง/ข้าวราดแกง/สลัด", "a": "หลังตลาดนัดหน้ามอ", "pick": 0, "m": ["อาหารจานเดียว", "อาหารตามสั่ง", "ข้าวราดแกง"]},
+{"n": "หม่าล่าทอด", "t": "หม่าล่า/ของทอด/ปิ้งย่าง/สเต็ก", "a": "ประตู 4", "pick": 0, "m": ["หม่าล่า", "ของทอด", "ปิ้งย่าง", "สเต็ก"]},
+{"n": "หม่าล่าทอด", "t": "หม่าล่า/ของทอด/ปิ้งย่าง/สเต็ก", "a": "ซอยตั้งสิน", "pick": 0, "m": ["หม่าล่า", "ของทอด", "ปิ้งย่าง", "สเต็ก"]},
+{"n": "กังฟู หมาล่าทั่ง", "t": "หม่าล่า/ของทอด/ปิ้งย่าง/สเต็ก", "a": "ประตู 4", "pick": 1, "m": ["หม่าล่า", "ของทอด", "ปิ้งย่าง", "สเต็ก"]},
+{"n": "ต้นกล้า สเต็ก", "t": "หม่าล่า/ของทอด/ปิ้งย่าง/สเต็ก", "a": "หน้ามอ ตรงทางเข้า Mr.Grill", "pick": 0, "m": ["หม่าล่า", "ของทอด", "ปิ้งย่าง", "สเต็ก"]},
+{"n": "Mr.Grill ร้านหมูกระทะ", "t": "หม่าล่า/ของทอด/ปิ้งย่าง/สเต็ก", "a": "ประตู 4", "pick": 1, "m": ["หม่าล่า", "ของทอด", "ปิ้งย่าง", "สเต็ก"]},
+{"n": "หม่าล่าแช่อู๋", "t": "หม่าล่า/ของทอด/ปิ้งย่าง/สเต็ก", "a": "Groove Market ซอยตั้งสิน", "pick": 0, "m": ["หม่าล่า", "ของทอด", "ปิ้งย่าง", "สเต็ก"]},
+{"n": "ร้านยำ", "t": "ยำ/ส้มตำ/ผลไม้สด", "a": "ประตู 4", "pick": 0, "m": ["ยำ", "ส้มตำ", "ผลไม้สด"]},
+{"n": "ส้มตำน้องเฟิร์ส", "t": "ยำ/ส้มตำ/ผลไม้สด", "a": "ประตู 5", "pick": 1, "m": ["ยำ", "ส้มตำ", "ผลไม้สด"]},
+{"n": "เจ๊ผึ้งผลไม้สด", "t": "ยำ/ส้มตำ/ผลไม้สด", "a": "ประตู 4", "pick": 1, "m": ["ยำ", "ส้มตำ", "ผลไม้สด"]},
+{"n": "บุษบา", "t": "ยำ/ส้มตำ/ผลไม้สด", "a": "ประตู 6", "pick": 0, "m": ["ยำ", "ส้มตำ", "ผลไม้สด"]},
+{"n": "ส้มตำ", "t": "ยำ/ส้มตำ/ผลไม้สด", "a": "ประตู 5 ข้ามถนนเจอเลย", "pick": 0, "m": ["ยำ", "ส้มตำ", "ผลไม้สด"]},
+{"n": "ลุงอุบล", "t": "ยำ/ส้มตำ/ผลไม้สด", "a": "ประตู 6", "pick": 0, "m": ["ยำ", "ส้มตำ", "ผลไม้สด"]},
+{"n": "บะหมี่", "t": "ก๋วยเตี๋ยว/บะหมี่/ราเมง", "a": "หน้า V คอนโด", "pick": 0, "m": ["ก๋วยเตี๋ยว", "บะหมี่", "ราเมง"]},
+{"n": "บะหมี่หมูแดง", "t": "ก๋วยเตี๋ยว/บะหมี่/ราเมง", "a": "ประตู 4", "pick": 1, "m": ["ก๋วยเตี๋ยว", "บะหมี่", "ราเมง"]},
+{"n": "COCO NOOD", "t": "ก๋วยเตี๋ยว/บะหมี่/ราเมง", "a": "", "pick": 0, "m": ["ก๋วยเตี๋ยว", "บะหมี่", "ราเมง"]},
+{"n": "Luna Bunny Nail", "t": "ทำเล็บ", "a": "ซอยตั้งสิน", "pick": 1, "m": ["ทำเล็บ", "เพ้นท์เล็บ"]},
+{"n": "Yui เพ้นท์เล็บ", "t": "ทำเล็บ", "a": "ประตู 4", "pick": 0, "m": ["ทำเล็บ", "เพ้นท์เล็บ"]},
+{"n": "ปลายผมบิวตี้", "t": "ทำผม", "a": "ประตู 4", "pick": 1, "m": ["ทำผม", "ตัดผม"]},
+{"n": "MU DUDEE", "t": "ทำผม", "a": "ประตู 4", "pick": 0, "m": ["ทำผม", "ตัดผม"]},
+{"n": "55โฟโต้ Kodak", "t": "ถ่ายรูป/ถ่ายเอกสาร", "a": "ประตู 4", "pick": 0, "m": ["ถ่ายรูป", "ถ่ายเอกสาร"]},
+{"n": "เอที ก๊อปปี้", "t": "ถ่ายรูป/ถ่ายเอกสาร", "a": "ประตู 4", "pick": 1, "m": ["ถ่ายรูป", "ถ่ายเอกสาร"]},
+{"n": "เคสเป็นหนึ่ง ซุ้ม93", "t": "ติดฟิล์มโทรศัพท์", "a": "ประตู 4", "pick": 0, "m": ["ติดฟิล์มโทรศัพท์", "เคสโทรศัพท์"]}];
+var LINE_ID="@077rywcj";
+var AREA="มหิดล ศาลายา"; // ใส่ชื่อมหาวิทยาลัย/ย่าน เพื่อให้แผนที่หาร้านแม่นขึ้น
+function row(s){var q=document.getElementById("q").value.trim();var u="https://www.google.com/maps/search/"+encodeURIComponent(s.n+" "+s.a+" "+AREA);
+var hit=q?s.m.filter(function(x){return x.indexOf(q)>-1}):[];if(!hit.length)hit=s.m.slice(0,3);
+var tag=hit.length?'<small>มี: '+hit.join(", ")+'</small>':'';
+return '<div class="shop"><div><b>'+s.n+'</b><small>'+s.t+' · '+s.a+'</small>'+tag+'</div><a href="'+u+'">ดูแผนที่</a></div>';}
+function render(){var q=document.getElementById("q").value.trim();
+var l=SHOPS.filter(function(s){return !q||(s.n+s.t+s.m.join(" ")).indexOf(q)>-1});
+document.getElementById("results").innerHTML=l.length?l.map(row).join(""):"ยังไม่พบร้านที่ตรงกัน ลองพิมพ์คำอื่น เช่น ถ่ายเอกสาร";}
+document.getElementById("q").addEventListener("input",render);render();
+(function(){var seen={},h="";SHOPS.forEach(function(s){var x=s.t;if(!seen[x]){seen[x]=1;h+='<button class="btn" type="button" data-m="'+x+'">'+x+'</button>';}});
+var c=document.getElementById("chips");c.innerHTML=h;c.addEventListener("click",function(e){var m=e.target.getAttribute("data-m");if(m){document.getElementById("q").value=m;render();}});})();
+document.getElementById("picks").innerHTML=SHOPS.filter(function(s){return s.pick}).map(row).join("")||"เร็วๆ นี้ ทีมงานกำลังคัดร้านเด็ดให้";
+
+// พิกัดของแต่ละทำเล [ละติจูด, ลองจิจูด] — ใส่พิกัดจริงแทน null แล้วระบบจะเรียงร้านตามระยะทางให้
+var ZONES=[["Groove Market",null],["ซอยตั้งสิน",null],["ประตู 4",null],["ประตู 5",null],["ประตู 6",null],["ใต้หอบัณฑิต",null],["หลังตลาดนัดหน้ามอ",null],["หน้ามอ",null],["หน้า V คอนโด",null]];
+function zoneOf(s){for(var i=0;i<ZONES.length;i++){if(s.a.indexOf(ZONES[i][0])>-1)return ZONES[i][1];}return null;}
+function dist(a,b){var r=Math.PI/180,dl=(b[0]-a[0])*r,dg=(b[1]-a[1])*r;var x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dg/2)*Math.sin(dg/2);return 2*6371000*Math.asin(Math.sqrt(x));}
+function fmt(m){return m<1000?(Math.max(10,Math.round(m/10)*10))+" เมตร":(m/1000).toFixed(1)+" กม.";}
+document.getElementById("loc").addEventListener("click",function(){
+var msg=document.getElementById("locmsg"),box=document.getElementById("nearlist");
+if(!navigator.geolocation){msg.textContent="อุปกรณ์นี้ระบุตำแหน่งไม่ได้ ลองใช้ปุ่มแผนที่ด้านล่าง";return;}
+msg.textContent="กำลังหาตำแหน่งของคุณ";box.innerHTML="";
+navigator.geolocation.getCurrentPosition(function(p){
+var me=[p.coords.latitude,p.coords.longitude],w=[];
+SHOPS.forEach(function(s){var z=zoneOf(s);if(z)w.push({s:s,d:dist(me,z)});});
+w.sort(function(x,y){return x.d-y.d});
+if(!w.length){msg.textContent="ยังไม่มีพิกัดร้านในระบบ ลองเลือกทำเลที่คุณอยู่ด้านบน";return;}
+msg.textContent=w[0].d>20000?"คุณอยู่ห่างจากร้านในระบบ แต่นี่คือร้านที่ใกล้ที่สุด":"ร้านใกล้คุณ "+Math.min(10,w.length)+" อันดับแรก";
+box.innerHTML=w.slice(0,10).map(function(x){return row(x.s).replace('</div><a href','<small><b>ห่างประมาณ '+fmt(x.d)+'</b></small></div><a href');}).join("");
+},function(){msg.textContent="ระบุตำแหน่งไม่ได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง แล้วกดอีกครั้ง";},{enableHighAccuracy:true,timeout:15000});
+});
+(function(){var z=["ประตู 4","ประตู 5","ประตู 6","ซอยตั้งสิน","Groove Market","ใต้หอบัณฑิต","หน้ามอ"];
+var c=document.getElementById("zonechips");
+c.innerHTML=z.map(function(x){return '<button class="btn" type="button" data-z="'+x+'">'+x+'</button>';}).join("");
+c.addEventListener("click",function(e){var x=e.target.getAttribute("data-z");if(!x)return;
+var l=SHOPS.filter(function(s){return s.a.indexOf(x)>-1});
+document.getElementById("locmsg").textContent="ร้านแถว "+x+" ("+l.length+" ร้าน)";
+document.getElementById("nearlist").innerHTML=l.map(row).join("");});})();
+var REVIEWS=[];try{REVIEWS=JSON.parse(document.getElementById("rvdata").textContent);}catch(e){}
+var ADMIN=false;
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]});}
+function drawReviews(){var box=document.getElementById("rvlist"),t=document.getElementById("rv").value.trim();
+var l=REVIEWS.filter(function(r){return !t||r.shop.indexOf(t)>-1});
+box.innerHTML=l.length?l.map(function(r){var st="★".repeat(r.stars)+"☆".repeat(5-r.stars);
+var img=(r.img&&r.img.indexOf("/_blob/")===0)?'<img src="'+r.img+'" alt="รูปประกอบรีวิว" loading="lazy" style="max-width:100%;border-radius:8px;margin:6px 0">':'';
+var ad=ADMIN?'<div style="margin-top:8px"><input data-rep="'+esc(r.id)+'" value="'+esc(r.reply||"")+'" placeholder="คำตอบจากร้าน" aria-label="คำตอบจากร้าน" style="margin-bottom:6px"><button class="btn" type="button" data-save="'+esc(r.id)+'">บันทึกคำตอบ</button> <button class="btn" type="button" data-del="'+esc(r.id)+'">ลบ</button></div>':'';
+return '<div class="shop" style="display:block"><b>'+esc(r.shop)+'</b>'+(r.demo?' <small>(ตัวอย่าง)</small>':'')+'<div aria-label="'+r.stars+' จาก 5 ดาว">'+st+'</div><p style="margin:4px 0">'+esc(r.text)+'</p>'+img+(r.reply?'<small><b>ร้านตอบกลับ:</b> '+esc(r.reply)+'</small>':'')+ad+'</div>';}).join(""):"ยังไม่มีรีวิว เป็นคนแรกที่รีวิวได้เลย";}
+document.getElementById("rvsend").href="https://line.me/R/oaMessage/"+LINE_ID+"/?text="+encodeURIComponent("รีวิวร้าน: \nคะแนน (1-5): \nข้อความ: ");
+document.getElementById("rv").addEventListener("input",drawReviews);drawReviews();
+async function saveReviews(msg){
+var art=(typeof claude!=="undefined")?await claude.use("artifact"):null;
+if(!art){msg("ระบบบันทึกยังไม่พร้อมใช้งาน");return false;}
+var c=document.documentElement.cloneNode(true),e;
+["results","picks","chips","zonechips","nearlist","rvlist","ashop"].forEach(function(i){e=c.querySelector("#"+i);if(e)e.innerHTML="";});
+e=c.querySelector("#locmsg");if(e)e.textContent="";
+e=c.querySelector("#amsg");if(e)e.textContent="";
+e=c.querySelector("#rvsend");if(e)e.setAttribute("href","#review");
+e=c.querySelector("#adminbox");if(e)e.setAttribute("hidden","");
+e=c.querySelector("#rvdata");if(e)e.textContent=JSON.stringify(REVIEWS).replace(/</g,"\\u003c");
+try{await art.publish("<!DOCTYPE html>\n"+c.outerHTML);return true;}
+catch(err){msg(err&&err.code==="conflict"?"มีการแก้ไขซ้อนกัน กรุณาลองใหม่อีกครั้ง":"บันทึกไม่สำเร็จ: "+((err&&err.message)||""));return false;}}
+(async function(){try{
+if(typeof claude==="undefined")return;
+var u=await claude.use("user");if(!u||!(await u.canEdit()))return;
+ADMIN=true;
+document.getElementById("ashop").innerHTML=SHOPS.map(function(s,i){return '<option value="'+i+'">'+esc(s.n+(s.a?" ("+s.a+")":""))+'</option>';}).join("");
+document.getElementById("adminbox").hidden=false;drawReviews();
+var msg=function(t){document.getElementById("amsg").textContent=t;};
+document.getElementById("aadd").addEventListener("click",async function(){
+var text=document.getElementById("atext").value.trim();if(!text){msg("กรุณาพิมพ์ข้อความรีวิว");return;}
+var img="",f=document.getElementById("afile").files[0];
+if(f){var as=await claude.use("assets");if(!as){msg("อัปโหลดรูปไม่ได้ในตอนนี้");return;}
+try{var up=await as.upload(f);img="/_blob/"+up.id;}catch(err){msg("อัปโหลดรูปไม่สำเร็จ");return;}}
+var sh=SHOPS[+document.getElementById("ashop").value];
+REVIEWS.unshift({id:"r"+Date.now(),shop:sh.n,stars:+document.getElementById("astars").value,text:text,img:img,reply:""});
+msg("กำลังบันทึก...");await saveReviews(msg);});
+document.getElementById("rvlist").addEventListener("click",async function(e){
+var id=e.target.getAttribute("data-save")||e.target.getAttribute("data-del");if(!id)return;
+var r=REVIEWS.filter(function(x){return x.id===id})[0];if(!r)return;
+if(e.target.getAttribute("data-del")){if(!confirm("ลบรีวิวนี้?"))return;REVIEWS=REVIEWS.filter(function(x){return x.id!==id});}
+else{var inp=document.querySelector('[data-rep="'+id+'"]');r.reply=inp?inp.value.trim():"";}
+msg("กำลังบันทึก...");await saveReviews(msg);});
+}catch(e){}})();
+</script>
+</body>
+</html>
